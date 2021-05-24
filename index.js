@@ -16,11 +16,11 @@ const dbUrl = process.env.DB_URL;
 var transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: 'nomoremaya@gmail.com',
-    pass: 'kbg_1996'
+    user: process.env.AUTH_FROM_MAIL,
+    pass: process.env.AUTH_FROM_PASS
   }
 });
-
+//hello
 app.use(express.json());
 app.use(cors());
 
@@ -77,10 +77,10 @@ app.post("/register", async (req, res) => {
             let addedUser = await db.collection("users").findOne({ name: req.body.name });
 
             var mailOptions = {
-            from: 'nomoremaya@gmail.com',
+            from: process.env.AUTH_FROM_MAIL,
             to: addedUser.email,
-            subject: 'Sending Email using Node.js',
-            text: 'That was easy!'
+            subject: 'Registration email',
+            text: 'Hello '+addedUser.name+' !'+'\n\n'+" Welcome to our community! Your registration was successful"+'\n\n'+'Love'+'\n'+'No More Maya'
             };
 
             transporter.sendMail(mailOptions, function(error, info){
@@ -122,10 +122,10 @@ app.post("/login", async (req, res) => {
             if (isPasswordCorrect)
             {
                 var mailOptions = {
-            from: 'nomoremaya@gmail.com',
+            from: process.env.AUTH_FROM_MAIL,
             to: userFound.email,
-            subject: 'Sending Email using Node.js',
-            text: 'Login successful!'
+            subject: 'Login attempt successful',
+                    text: 'Hi ' + userFound.name + ','+'\n' + 'Login successful! Glad to have you back' + '\n\n' + 'Warm Regards,' + '\n' + 'No More Maya'
             };
 
             transporter.sendMail(mailOptions, function(error, info){
@@ -153,6 +153,3 @@ app.post("/login", async (req, res) => {
 
 app.listen(port, () => { console.log("App runs at ", port) });
 
-//Mongo credentials
-//username: balaji
-//password: N4SHQwVRvD2wWfvO
