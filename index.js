@@ -32,7 +32,7 @@ app.get("/", async (req, res) => {
     let db = client.db("auth");
         let data = await db.collection("users").find().project({password:0}).toArray();
         
-        res.status(200).json({ "Success": data });
+        res.status(200).json({ "allUsersData": data });
         
 
         
@@ -57,7 +57,7 @@ app.post("/register", async (req, res) => {
         //1. Check if the data entered by user already exists in the database
         let found = await db.collection("users").findOne({ email: req.body.email });
         if (found !== null)
-            res.status(409).json({ "Error": "User Already exists" });
+            res.status(409).json({ "regError": "User Already exists" });
         
         else {
             
@@ -90,7 +90,7 @@ app.post("/register", async (req, res) => {
                 console.log('Email sent: ' + info.response);
             }
             });
-            res.status(200).json({ "User registered:": addedUser });
+            res.status(200).json({ "regUserDetails": addedUser });
             
 
         }
@@ -135,10 +135,10 @@ app.post("/login", async (req, res) => {
                 console.log('Email sent: ' + info.response);
             }
             });
-                res.status(200).json({ "Login Success": userFound });
+                res.status(200).json({ "userData": userFound });
             }
             else
-                res.status(400).json({ "Login failed": "Password incorrect" });
+                res.status(400).json({ "loginError": "Password incorrect" });
             
 
         }
